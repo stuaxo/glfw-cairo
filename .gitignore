@@ -10,5 +10,4 @@ docs/Gemfile.lock
 # gl
 *.exe
 *.bak
-*.hbm
 tmp

@@ -12,6 +12,8 @@
 #define GLFW_EXPOSE_NATIVE_X11
 #include <GLFW/glfw3native.h>
 
+#define UNUSED( x ) ( ( void )( x ) )
+
 typedef struct
 {
    GLFWwindow *         win;
@@ -25,9 +27,20 @@ typedef struct
    cairo_text_extents_t extents;
 } GLFW_Cairo;
 
+static void key_callback( GLFWwindow * window, int key, int scancode, int action, int mods )
+{
+   UNUSED( scancode );
+   UNUSED( mods );
+
+   if( key == GLFW_KEY_ESCAPE && action == GLFW_PRESS )
+   {
+      glfwSetWindowShouldClose( window, GLFW_TRUE );
+   }
+}
+
 int main()
 {
-   const char * text = "GLFW .AND. Cairo";
+   const char * text = "https://github.com/rjopek/gl";
 
    GLFW_Cairo gl;
    memset( &gl, 0, sizeof( gl ) );
@@ -40,7 +53,7 @@ int main()
 
    glfwWindowHint( GLFW_CLIENT_API, GLFW_NO_API );
 
-   gl.win = glfwCreateWindow( 720, 450, text, NULL, NULL );
+   gl.win = glfwCreateWindow( 720, 450, "GLFW .AND. Cairo", NULL, NULL );
    if( ! gl.win )
    {
       glfwTerminate();
@@ -60,7 +73,7 @@ int main()
    }
 
    glfwGetFramebufferSize( gl.win, &gl.width, &gl.height );
-   gl.surface  = cairo_xlib_surface_create( gl.xdpy, gl.xwin, gl.vis, gl.width, gl.height );
+   gl.surface = cairo_xlib_surface_create( gl.xdpy, gl.xwin, gl.vis, gl.width, gl.height );
 
    gl.cr = cairo_create( gl.surface );
    if( ! gl.cr )
@@ -68,6 +81,8 @@ int main()
       glfwTerminate();
       exit( EXIT_FAILURE );
    }
+
+   glfwSetKeyCallback( gl.win, key_callback );
 
    while( ! glfwWindowShouldClose( gl.win ) )
    {
@@ -79,10 +94,9 @@ int main()
       cairo_set_source_rgb( gl.cr, 1.0, 1.0, 1.0 );
       cairo_set_operator( gl.cr, CAIRO_OPERATOR_SOURCE );
       cairo_paint( gl.cr );
-
       //---
-      cairo_select_font_face( gl.cr, "monospace", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL );
-      cairo_set_font_size( gl.cr, 48 );
+      cairo_select_font_face( gl.cr, "FreeMono", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD );
+      cairo_set_font_size( gl.cr, 36 );
       cairo_set_source_rgb( gl.cr, 0.0, 0.0, 0.0 );
 
       cairo_text_extents( gl.cr, text, &gl.extents );
@@ -93,7 +107,6 @@ int main()
       cairo_move_to( gl.cr, gl.width, gl.height );
       cairo_show_text( gl.cr, text );
       //---
-
       cairo_pop_group_to_source( gl.cr );
       cairo_paint( gl.cr );
       cairo_surface_flush( gl.surface );
