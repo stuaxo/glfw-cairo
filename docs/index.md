@@ -3,7 +3,7 @@ layout: default
 title: "gl"
 ---
 
-![GLFW and Cairo.](assets/img/GLFW-Cairo.svg)
+[![GLFW and Cairo.](assets/img/GLFW-Cairo.svg)](https://github.com/rjopek/gl)
 
 ---
 
