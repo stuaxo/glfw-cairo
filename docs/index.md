@@ -28,3 +28,7 @@ title: "gl"
 [![](assets/img/gl_04.png)](https://github.com/rjopek/gl/blob/main/examples/gl_04.c)
 
 ---
+
+[![](assets/img/gl_05.png)](https://github.com/rjopek/gl/blob/main/examples/gl_05.c)
+
+---
