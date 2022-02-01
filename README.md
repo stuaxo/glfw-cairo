@@ -1,6 +1,6 @@
 # GLFW .AND. Cairo
 
-A tutorial on how to use GLFW and Cairo.
+A tutorial on how to use [GLFW](https://www.glfw.org/) and [Cairo](https://www.cairographics.org/).
 
 ### Getting Started
 
