@@ -24,7 +24,7 @@ typedef struct
    Visual *             vis;
    cairo_surface_t *    surface;
    cairo_t *            cr;
-   cairo_text_extents_t extents;
+   cairo_text_extents_t te;
 } GLFW_Cairo;
 
 static void key_callback( GLFWwindow * window, int key, int scancode, int action, int mods )
@@ -41,6 +41,7 @@ static void key_callback( GLFWwindow * window, int key, int scancode, int action
 int main()
 {
    const char * text = "https://github.com/rjopek/gl";
+   double xc, yc;
 
    GLFW_Cairo gl;
    memset( &gl, 0, sizeof( gl ) );
@@ -99,19 +100,19 @@ int main()
       cairo_set_font_size( gl.cr, 36 );
       cairo_set_source_rgb( gl.cr, 0.0, 0.0, 0.0 );
 
-      cairo_text_extents( gl.cr, text, &gl.extents );
+      cairo_text_extents( gl.cr, text, &gl.te );
 
-      gl.width  = ( gl.width  - gl.extents.width ) / 2;
-      gl.height = ( gl.height + gl.extents.height ) / 2;
+      xc = ( gl.width  - gl.te.width ) / 2;
+      yc = ( gl.height + gl.te.height ) / 2;
 
-      cairo_move_to( gl.cr, gl.width, gl.height );
+      cairo_move_to( gl.cr, xc, yc );
       cairo_show_text( gl.cr, text );
       //---
       cairo_pop_group_to_source( gl.cr );
       cairo_paint( gl.cr );
       cairo_surface_flush( gl.surface );
-      glfwSwapBuffers( gl.win );
 
+      glfwSwapBuffers( gl.win );
       glfwPollEvents();
    }
 
