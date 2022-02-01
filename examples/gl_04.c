@@ -18,14 +18,15 @@
 
 typedef struct
 {
-   GLFWwindow *         win;
-   int                  width;
-   int                  height;
-   Display *            xdpy;
-   Window               xwin;
-   Visual *             vis;
-   cairo_surface_t *    surface;
-   cairo_t *            cr;
+   GLFWwindow *      win;
+   int               width;
+   int               height;
+   Display *         xdpy;
+   Window            xwin;
+   Visual *          vis;
+   cairo_surface_t * surface;
+   cairo_t *         cr;
+   cairo_pattern_t * pat;
 } GLFW_Cairo;
 
 static void key_callback( GLFWwindow * window, int key, int scancode, int action, int mods )
@@ -91,7 +92,7 @@ int main()
    while( ! glfwWindowShouldClose( gl.win ) )
    {
       glfwGetFramebufferSize( gl.win, &gl.width, &gl.height );
-      cairo_xlib_surface_set_size( gl.surface, ( double ) gl.width, ( double ) gl.height );
+      cairo_xlib_surface_set_size( gl.surface, gl.width, gl.height );
 
       cairo_push_group( gl.cr );
 
