@@ -18,14 +18,14 @@
 
 typedef struct
 {
-   GLFWwindow *         win;
-   int                  width;
-   int                  height;
-   Display *            xdpy;
-   Window               xwin;
-   Visual *             vis;
-   cairo_surface_t *    surface;
-   cairo_t *            cr;
+   GLFWwindow *      win;
+   int               width;
+   int               height;
+   Display *         xdpy;
+   Window            xwin;
+   Visual *          vis;
+   cairo_surface_t * surface;
+   cairo_t *         cr;
 } GLFW_Cairo;
 
 static void key_callback( GLFWwindow * window, int key, int scancode, int action, int mods )
