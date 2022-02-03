@@ -91,9 +91,7 @@ int main()
 
       cairo_push_group( gl.cr );
 
-      const int scancode = glfwGetKeyScancode( GLFW_KEY_X );
-
-      if( width != gl.width || height != gl.height || scancode == GLFW_KEY_DOWN )
+      if( width != gl.width || height != gl.height )
       {
          cairo_set_source_rgb( gl.cr, 1.0, 1.0, 1.0 );
          cairo_set_operator( gl.cr, CAIRO_OPERATOR_SOURCE );
