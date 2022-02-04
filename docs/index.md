@@ -40,3 +40,7 @@ title: "gl"
 [![](assets/img/gl_07.png)](https://github.com/rjopek/gl/blob/main/examples/gl_07.c)
 
 ---
+
+[![](assets/img/gl_08.png)](https://github.com/rjopek/gl/blob/main/examples/gl_08.c)
+
+---
