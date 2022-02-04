@@ -27,7 +27,6 @@ typedef struct
    cairo_surface_t *    surface;
    cairo_t *            cr;
    cairo_text_extents_t te;
-   cairo_font_extents_t fe;
 } GLFW_Cairo;
 
 static void key_callback( GLFWwindow * window, int key, int scancode, int action, int mods );
@@ -40,7 +39,6 @@ int main()
    const char * text = "Vertical Menu";
    double xc;
    int i;
-
 
    GLFW_Cairo gl;
    memset( &gl, 0, sizeof( gl ) );
@@ -102,7 +100,6 @@ int main()
          cairo_set_source_rgb( gl.cr, 0.1961, 0.1961, 0.1961 );
 
          cairo_text_extents( gl.cr, text, &gl.te );
-         cairo_font_extents( gl.cr, &gl.fe );
 
          xc = ( gl.width - gl.te.width ) / 2;
 
@@ -136,8 +133,8 @@ int main()
       cairo_pop_group_to_source( gl.cr );
       cairo_paint( gl.cr );
       cairo_surface_flush( gl.surface );
-      glfwSwapBuffers( gl.win );
 
+      glfwSwapBuffers( gl.win );
       glfwPollEvents();
    }
    cairo_destroy( gl.cr );
