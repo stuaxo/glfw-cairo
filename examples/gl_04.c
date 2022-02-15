@@ -26,7 +26,6 @@ typedef struct
    Visual *          vis;
    cairo_surface_t * surface;
    cairo_t *         cr;
-   cairo_pattern_t * pat;
 } GLFW_Cairo;
 
 static void key_callback( GLFWwindow * window, int key, int scancode, int action, int mods )
