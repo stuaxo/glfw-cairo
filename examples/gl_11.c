@@ -129,7 +129,7 @@ int main()
             cairo_set_line_cap( gl.cr, CAIRO_LINE_CAP_ROUND );
             cairo_stroke( gl.cr );
          }
-         
+
          cairo_set_source_rgb( gl.cr, 0.235294118, 0.235294118, 0.235294118 );
          cairo_rectangle( gl.cr, 0, ( 20 + 40 ) * i + 20, 300, 40 );
          cairo_fill( gl.cr );
@@ -152,7 +152,7 @@ int main()
          }
          cairo_set_source_rgb( gl.cr, 0.0, 0.0, 0.0 );
          cairo_move_to( gl.cr, 325.0, 50.0 + 60.0 * i );
-         sprintf( str, "%d", i );
+         sprintf( str, "%d", i + 1 );
          cairo_show_text( gl.cr, str );
       }
       //---
