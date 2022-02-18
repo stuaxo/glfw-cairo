@@ -114,8 +114,8 @@ int main()
          if( gl.row == i )
          {
             cairo_set_source_rgb( gl.cr, 0.0, 1.0, 0.0 );
-            cairo_move_to( gl.cr, 300.0, ( 20.0 + 40.0 ) * i + 40.0 );
-            cairo_line_to( gl.cr, 350.0, ( 20.0 + 40.0 ) * i + 40.0 );
+            cairo_move_to( gl.cr, 300.0, 60.0 * i + 40.0 );
+            cairo_line_to( gl.cr, 350.0, 60.0 * i + 40.0 );
             cairo_set_line_width( gl.cr, 40.0 );
             cairo_set_line_cap( gl.cr, CAIRO_LINE_CAP_ROUND );
             cairo_stroke( gl.cr );
@@ -123,15 +123,15 @@ int main()
          else
          {
             cairo_set_source_rgb( gl.cr, 0.0, 0.549019608, 0.862745098 );
-            cairo_move_to( gl.cr, 300.0, ( 20.0 + 40.0 ) * i + 40.0 );
-            cairo_line_to( gl.cr, 350.0, ( 20.0 + 40.0 ) * i + 40.0 );
+            cairo_move_to( gl.cr, 300.0, 60.0 * i + 40.0 );
+            cairo_line_to( gl.cr, 350.0, 60.0 * i + 40.0 );
             cairo_set_line_width( gl.cr, 40.0 );
             cairo_set_line_cap( gl.cr, CAIRO_LINE_CAP_ROUND );
             cairo_stroke( gl.cr );
          }
 
          cairo_set_source_rgb( gl.cr, 0.235294118, 0.235294118, 0.235294118 );
-         cairo_rectangle( gl.cr, 0, ( 20 + 40 ) * i + 20, 300, 40 );
+         cairo_rectangle( gl.cr, 0.0, 60.0 * i + 20.0, 300, 40 );
          cairo_fill( gl.cr );
 
          if( gl.row == i )
@@ -139,7 +139,7 @@ int main()
             cairo_text_extents( gl.cr, menuItem[ i ], &gl.te );
             x = ( 300 - gl.te.width ) / 2;
             cairo_set_source_rgb( gl.cr, 0.0, 1.0, 0.0 );
-            cairo_move_to( gl.cr, x, 50 + 60 * i );
+            cairo_move_to( gl.cr, x, 50.0 + 60.0 * i );
             cairo_show_text( gl.cr, menuItem[ i ] );
          }
          else
@@ -200,7 +200,7 @@ static void key_callback( GLFWwindow * window, int key, int scancode, int action
       }
       case GLFW_KEY_DOWN:
       {
-         if( gl.row < MENU_ITEM - 1)
+         if( gl.row < MENU_ITEM - 1 )
          {
             gl.row++;
          }
