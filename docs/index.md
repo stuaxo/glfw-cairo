@@ -77,3 +77,9 @@ The best way to learn programing is by practicing examples. This page contains e
 [![](assets/img/gl_12.png)](https://github.com/rjopek/gl/blob/main/examples/gl_12.c)
 
 ---
+
+- gl_13.c
+
+[![](assets/img/gl_13.png)](https://github.com/rjopek/gl/blob/main/examples/gl_13.c)
+
+---
