@@ -2,9 +2,6 @@
  *
  */
 
-#include <stdlib.h>
-#include <string.h>
-
 #include <cairo/cairo.h>
 #include <cairo/cairo-xlib.h>
 
@@ -14,113 +11,99 @@
 
 #define UNUSED( x ) ( ( void )( x ) )
 
-typedef struct
-{
-   GLFWwindow *         win;
-   int                  width;
-   int                  height;
-   Display *            xdpy;
-   Window               xwin;
-   Visual *             vis;
-   cairo_surface_t *    surface;
-   cairo_t *            cr;
-   cairo_text_extents_t te;
-} GLFW_Cairo;
-
-static void key_callback( GLFWwindow * window, int key, int scancode, int action, int mods )
+static void key_callback( GLFWwindow* window, int key, int scancode, int action, int mods )
 {
    UNUSED( scancode );
    UNUSED( mods );
 
-   if( key == GLFW_KEY_ESCAPE && action == GLFW_PRESS )
+   if( action == GLFW_PRESS )
    {
-      glfwSetWindowShouldClose( window, GLFW_TRUE );
+      return;
+   }
+
+   switch( key )
+   {
+      case GLFW_KEY_ESCAPE:
+      {
+         glfwSetWindowShouldClose( window, GLFW_TRUE );
+         break;
+      }
    }
 }
 
-int main()
+int main( void )
 {
-   const char * text = "https://github.com/rjopek/gl";
-   double xc, yc;
+   int width, height;
+   cairo_text_extents_t te;
+   const char* text = "https://github.com/rjopek/glfw-cairo";
+   double x, y;
 
-   GLFW_Cairo gl;
-   memset( &gl, 0, sizeof( gl ) );
+   int tmp_w = 0, tmp_h = 0;
 
    if( ! glfwInit() )
    {
       glfwTerminate();
-      exit( EXIT_FAILURE );
+      return 1;
    }
 
    glfwWindowHint( GLFW_CLIENT_API, GLFW_NO_API );
 
-   gl.win = glfwCreateWindow( 720, 450, "GLFW .AND. Cairo", NULL, NULL );
-   if( ! gl.win )
+   GLFWwindow* window = glfwCreateWindow( 720, 450, "GLFW .AND. Cairo", NULL, NULL );
+   if( ! window )
    {
       glfwTerminate();
-      exit( EXIT_FAILURE );
+      return 1;
    }
 
    glfwSwapInterval( 1 );
 
-   gl.xdpy = glfwGetX11Display();
-   gl.xwin = glfwGetX11Window( gl.win );
+   Display* xdpy = glfwGetX11Display();
+   Window xwin = glfwGetX11Window( window );
 
-   gl.vis  = DefaultVisual( gl.xdpy, DefaultScreen( gl.xdpy ) );
-   if( ! gl.vis )
+   Visual* vis = DefaultVisual( xdpy, DefaultScreen( xdpy ) );
+
+   glfwSetKeyCallback( window, key_callback );
+
+   while( ! glfwWindowShouldClose( window ) )
    {
-      glfwTerminate();
-      exit( EXIT_FAILURE );
-   }
-
-   glfwGetFramebufferSize( gl.win, &gl.width, &gl.height );
-   gl.surface = cairo_xlib_surface_create( gl.xdpy, gl.xwin, gl.vis, gl.width, gl.height );
-
-   gl.cr = cairo_create( gl.surface );
-   if( ! gl.cr )
-   {
-      glfwTerminate();
-      exit( EXIT_FAILURE );
-   }
-
-   glfwSetKeyCallback( gl.win, key_callback );
-
-   while( ! glfwWindowShouldClose( gl.win ) )
-   {
-      glfwGetFramebufferSize( gl.win, &gl.width, &gl.height );
-      cairo_xlib_surface_set_size( gl.surface, gl.width, gl.height );
-
-      cairo_push_group( gl.cr );
-
-      cairo_set_source_rgb( gl.cr, 1.0, 1.0, 1.0 );
-      cairo_set_operator( gl.cr, CAIRO_OPERATOR_SOURCE );
-      cairo_paint( gl.cr );
+      glfwGetFramebufferSize( window, &width, &height );
       //---
-      cairo_select_font_face( gl.cr, "FreeMono", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD );
-      cairo_set_font_size( gl.cr, 36 );
-      cairo_set_source_rgb( gl.cr, 0.0, 0.0, 0.0 );
+      if( tmp_w != width || tmp_h != height )
+      {
+         cairo_surface_t* surface = cairo_xlib_surface_create( xdpy, xwin, vis, width, height );
+         cairo_t* cr = cairo_create( surface );
+         cairo_xlib_surface_set_size( surface, width, height );
 
-      cairo_text_extents( gl.cr, text, &gl.te );
+         cairo_set_source_rgb( cr, 1.0, 1.0, 1.0 );
+         cairo_rectangle( cr, 0, 0, width, height );
+         cairo_fill( cr );
 
-      xc = ( gl.width  - gl.te.width ) / 2;
-      yc = ( gl.height + gl.te.height ) / 2;
+         cairo_select_font_face( cr, "FreeMono", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD );
+         cairo_set_font_size( cr, 32 );
+         cairo_set_source_rgb( cr, 0.0, 0.0, 0.0 );
 
-      cairo_move_to( gl.cr, xc, yc );
-      cairo_show_text( gl.cr, text );
+         cairo_text_extents( cr, text, &te );
+
+         x = ( width  - te.width ) / 2;
+         y = ( height + te.height ) / 2;
+
+         cairo_move_to( cr, x, y );
+         cairo_show_text( cr, text );
+
+         cairo_surface_destroy( surface );
+         cairo_destroy( cr );
+
+         tmp_w = width;
+         tmp_h = height;
+      }
       //---
-      cairo_pop_group_to_source( gl.cr );
-      cairo_paint( gl.cr );
-      cairo_surface_flush( gl.surface );
-
-      glfwSwapBuffers( gl.win );
+      glfwSwapBuffers( window );
       glfwPollEvents();
    }
 
-   cairo_destroy( gl.cr );
-   cairo_surface_finish( gl.surface );
-   cairo_surface_destroy( gl.surface );
-   glfwDestroyWindow( gl.win );
+   glfwDestroyWindow( window );
 
    glfwTerminate();
-   exit( EXIT_SUCCESS );
+
+   return 0;
 }
