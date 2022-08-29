@@ -2,6 +2,8 @@
  *
  */
 
+#include <X11/Xlib.h>
+
 #include <cairo/cairo.h>
 #include <cairo/cairo-xlib.h>
 
@@ -47,7 +49,6 @@ int main( void )
 
    if( ! glfwInit() )
    {
-      glfwTerminate();
       return 1;
    }
 
@@ -64,10 +65,12 @@ int main( void )
 
    xdpy = glfwGetX11Display();
    xwin = glfwGetX11Window( win );
-
-   vis = DefaultVisual( xdpy, DefaultScreen( xdpy ) );
+   vis  = DefaultVisual( xdpy, DefaultScreen( xdpy ) );
 
    glfwSetKeyCallback( win, key_callback );
+
+   sf = cairo_xlib_surface_create( xdpy, xwin, vis, width, height );
+   cr = cairo_create( sf );
 
    while( ! glfwWindowShouldClose( win ) )
    {
@@ -75,9 +78,6 @@ int main( void )
       //---
       if( tmp_w != width || tmp_h != height )
       {
-         sf = cairo_xlib_surface_create( xdpy, xwin, vis, width, height );
-         cr = cairo_create( sf );
-
          cairo_xlib_surface_set_size( sf, width, height );
 
          cairo_set_source_rgb( cr, 1.0, 1.0, 1.0 );
@@ -96,9 +96,6 @@ int main( void )
          cairo_move_to( cr, x, y );
          cairo_show_text( cr, text );
 
-         cairo_surface_destroy( sf );
-         cairo_destroy( cr );
-
          tmp_w = width;
          tmp_h = height;
       }
@@ -106,6 +103,9 @@ int main( void )
       glfwSwapBuffers( win );
       glfwPollEvents();
    }
+
+   cairo_surface_destroy( sf );
+   cairo_destroy( cr );
 
    glfwDestroyWindow( win );
 
