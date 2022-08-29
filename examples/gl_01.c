@@ -3,9 +3,6 @@
  */
 
 #include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #include <cairo/cairo.h>
 #include <cairo/cairo-xlib.h>
@@ -16,118 +13,102 @@
 
 #define UNUSED( x ) ( ( void )( x ) )
 
-typedef struct
-{
-   GLFWwindow *      win;
-   int               width;
-   int               height;
-   Display *         xdpy;
-   Window            xwin;
-   Visual *          vis;
-   cairo_surface_t * surface;
-   cairo_t *         cr;
-} GLFW_Cairo;
-
-static void key_callback( GLFWwindow * window, int key, int scancode, int action, int mods )
+static void key_callback( GLFWwindow* win, int key, int scancode, int action, int mods )
 {
    UNUSED( scancode );
    UNUSED( mods );
 
-   if( key == GLFW_KEY_ESCAPE && action == GLFW_PRESS )
+   if( action == GLFW_PRESS )
    {
-      glfwSetWindowShouldClose( window, GLFW_TRUE );
+      return;
+   }
+
+   switch( key )
+   {
+      case GLFW_KEY_ESCAPE:
+      {
+         glfwSetWindowShouldClose( win, GLFW_TRUE );
+         break;
+      }
    }
 }
 
-int main()
+int main( void )
 {
-   int width = 0, height = 0;
-   double xc, yc;
+   GLFWwindow *win;
+   int width, height;
+   Display *xdpy;
+   Window xwin;
+   Visual *vis;
+   cairo_surface_t *sf;
+   cairo_t *cr;
+   size_t i;
+   double x, y;
    double radius = 100;
    size_t n = 45;
-
-   GLFW_Cairo gl;
-   memset( &gl, 0, sizeof( gl ) );
+   int tmp_w = 0, tmp_h = 0;
 
    if( ! glfwInit() )
    {
-      glfwTerminate();
-      exit( EXIT_FAILURE );
+      return 1;
    }
 
    glfwWindowHint( GLFW_CLIENT_API, GLFW_NO_API );
 
-   gl.win = glfwCreateWindow( 720, 450, "GLFW .AND. Cairo", NULL, NULL );
-   if( ! gl.win )
+   win = glfwCreateWindow( 720, 450, "GLFW .AND. Cairo", NULL, NULL );
+   if( ! win )
    {
       glfwTerminate();
-      exit( EXIT_FAILURE );
+      return 1;
    }
 
    glfwSwapInterval( 1 );
 
-   gl.xdpy = glfwGetX11Display();
-   gl.xwin = glfwGetX11Window( gl.win );
+   xdpy = glfwGetX11Display();
+   xwin = glfwGetX11Window( win );
+   vis = DefaultVisual( xdpy, DefaultScreen( xdpy ) );
 
-   gl.vis  = DefaultVisual( gl.xdpy, DefaultScreen( gl.xdpy ) );
-   if( ! gl.vis )
+   glfwSetKeyCallback( win, key_callback );
+
+   sf = cairo_xlib_surface_create( xdpy, xwin, vis, width, height );
+   cr = cairo_create( sf );
+
+   while( ! glfwWindowShouldClose( win ) )
    {
-      glfwTerminate();
-      exit( EXIT_FAILURE );
-   }
-
-   glfwGetFramebufferSize( gl.win, &gl.width, &gl.height );
-   gl.surface  = cairo_xlib_surface_create( gl.xdpy, gl.xwin, gl.vis, gl.width, gl.height );
-
-   gl.cr = cairo_create( gl.surface );
-   if( ! gl.cr )
-   {
-      glfwTerminate();
-      exit( EXIT_FAILURE );
-   }
-
-   glfwSetKeyCallback( gl.win, key_callback );
-
-   while( ! glfwWindowShouldClose( gl.win ) )
-   {
-      glfwGetFramebufferSize( gl.win, &gl.width, &gl.height );
-      cairo_xlib_surface_set_size( gl.surface, gl.width, gl.height );
-
-      cairo_push_group( gl.cr );
-
-      if( width != gl.width || height != gl.height )
+      glfwGetFramebufferSize( win, &width, &height );
+      //---
+      if( tmp_w != width || tmp_h != height )
       {
-         cairo_set_source_rgb( gl.cr, 1.0, 1.0, 1.0 );
-         cairo_set_operator( gl.cr, CAIRO_OPERATOR_SOURCE );
-         cairo_paint( gl.cr );
-         //---
-         cairo_set_source_rgb( gl.cr, 1.0, 0.0, 0.0 );
-         cairo_set_line_width( gl.cr, 1.0 );
-         for( size_t i = 0; i < n; i++ )
+         cairo_xlib_surface_set_size( sf, width, height );
+
+         cairo_set_source_rgb( cr, 1.0, 1.0, 1.0 );
+         cairo_rectangle( cr, 0, 0, width, height );
+         cairo_fill( cr );
+
+         cairo_set_source_rgb( cr, 1.0, 0.0, 0.0 );
+         cairo_set_line_width( cr, 1.0 );
+         for( i = 0; i < n; i++ )
          {
-            xc = sin(        i * 2 * M_PI / n ) * radius + gl.width / 2;
-            yc = cos( M_PI + i * 2 * M_PI / n ) * radius + gl.height / 2;
-            cairo_arc( gl.cr, xc, yc, radius, 0, 2 * M_PI );
-            cairo_stroke( gl.cr );
+            x = sin(        i * 2 * M_PI / n ) * radius + width / 2;
+            y = cos( M_PI + i * 2 * M_PI / n ) * radius + height / 2;
+            cairo_arc( cr, x, y, radius, 0, 2 * M_PI );
+            cairo_stroke( cr );
          }
-         width  = gl.width;
-         height = gl.height;
-         printf( "Width  : %i\nWeight : %i \n", width, height );
+
+         tmp_w = width;
+         tmp_h = height;
       }
       //---
-      cairo_pop_group_to_source( gl.cr );
-      cairo_paint( gl.cr );
-      cairo_surface_flush( gl.surface );
-      glfwSwapBuffers( gl.win );
-
+      glfwSwapBuffers( win );
       glfwPollEvents();
    }
 
-   cairo_destroy( gl.cr );
-   cairo_surface_finish( gl.surface );
-   cairo_surface_destroy( gl.surface );
-   glfwDestroyWindow( gl.win );
+   cairo_surface_destroy( sf );
+   cairo_destroy( cr );
+
+   glfwDestroyWindow( win );
 
    glfwTerminate();
-   exit( EXIT_SUCCESS );
+
+   return 0;
 }
