@@ -77,10 +77,9 @@ int main( void )
       if( tmp_w != width || tmp_h != height )
       {
          cairo_save( cr );
-
          cairo_set_source_rgba( cr, 1.0, 1.0, 1.0, 1.0 );
          cairo_set_operator( cr, CAIRO_OPERATOR_OVER );
-	      cairo_scale( cr, width, height );
+         cairo_scale( cr, width, height );
          cairo_paint( cr );
          cairo_restore( cr );
 
@@ -99,8 +98,8 @@ int main( void )
 
          cairo_surface_flush( sf );
 
-      	cairo_pop_group_to_source( cr );
-      	cairo_paint( cr );
+         cairo_pop_group_to_source( cr );
+         cairo_paint( cr );
 
          tmp_w = width;
          tmp_h = height;
