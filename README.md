@@ -6,4 +6,5 @@ This page contains examples on basic concepts of GLFW and Cairo. We encourage yo
 
 ### Getting Started
 
-For more info see [getting started](examples/README.md).
+- [cairo-gl](examples/cairo-gl/README.md)
+- [cairo-xlib](examples/cairo-xlib/README.md)
