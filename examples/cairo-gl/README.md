@@ -9,7 +9,7 @@
 ## Installing on Linux
 
 ```
-gcc gl_.c -o gl_ -lglfw3 -lGL -lcairo -lm -L /usr/local/lib/x86_64-linux-gnu
+gcc gl_00.c -o gl_00 -lglfw3 -lGL -lcairo -lm -L /usr/local/lib/x86_64-linux-gnu
 ```
 
 ## Installing on Mac OSX

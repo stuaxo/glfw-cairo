@@ -17,7 +17,7 @@ int main( void )
    int width = 720, height = 450;
    cairo_device_t *device;
    cairo_surface_t *sf;
-   cairo_t * cr;
+   cairo_t *cr;
    int tmp_w = 0, tmp_h = 0;
    double x = 25.0, y = 25.0;
    double w, h;
@@ -42,7 +42,6 @@ int main( void )
    glfwSwapInterval( 1 );
 
    device = cairo_glx_device_create( glfwGetX11Display(), glfwGetGLXContext( win ) );
-
    sf = cairo_gl_surface_create_for_window( device, glfwGetX11Window( win ), width, height );
    cr = cairo_create( sf );
 
