@@ -2,7 +2,7 @@
 *.h linguist-language=c
 *.c linguist-language=c
 
+examples/* linguist-documentation=false
+
 .gitignore export-ignore
 .gitattributes export-ignore
-
-examples/* linguist-documentation=false
