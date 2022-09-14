@@ -2,7 +2,8 @@
 *.h linguist-language=c
 *.c linguist-language=c
 
-examples/* linguist-documentation=false
+examples/cairo-gl/* linguist-documentation=false
+examples/cairo-xlib/* linguist-documentation=false
 
 .gitignore export-ignore
 .gitattributes export-ignore
