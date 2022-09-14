@@ -26,7 +26,7 @@ gcc $(pkg-config --cflags glfw3 cairo) gl_00.c -o gl_00 $(pkg-config --libs glfw
 e.t.c
 
 ```
-gcc gl_00.c -o gl_00 -lglfw3 -lcairo -lpthread
+gcc gl_00.c -o gl_00 -lglfw3 -lcairo -lm
 ```
 
 ## Installing on Mac OSX

@@ -1,6 +1,6 @@
 /*
- * GLFW Cairo test
- * Copyright 2022 Rafał Jopek ( rafaljopek at hotmail com )
+ *
+ * 
  */
 
 #include <cairo/cairo.h>
