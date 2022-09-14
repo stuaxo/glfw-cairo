@@ -92,7 +92,6 @@ This page contains examples on basic concepts of GLFW and Cairo. We encourage yo
 
 - gl_15.c
 
-[![](assets/img/gl_14.png)](https://github.com/rjopek/gl/blob/main/examples/cairo-gl/gl_15.c)
-
+[![](assets/img/gl_15.png)](https://github.com/rjopek/gl/blob/main/examples/cairo-gl/gl_15.c)
 
 # The End
