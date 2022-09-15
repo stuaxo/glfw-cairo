@@ -4,6 +4,7 @@
 
 examples/cairo-gl/* linguist-documentation=false
 examples/cairo-xlib/* linguist-documentation=false
+examples/image_surface/* linguist-documentation=false
 
 .gitignore export-ignore
 .gitattributes export-ignore
